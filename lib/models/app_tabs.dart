@@ -1,1 +1,5 @@
-enum AppTabs { main, work }
+enum AppTabs {
+  main,
+  book,
+  statistics,
+}

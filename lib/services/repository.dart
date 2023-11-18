@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:ekzh/services/entities/card_ekzh.dart';
-import 'package:ekzh/services/entities/pending_request.dart';
-import 'package:ekzh/services/https_service.dart';
-import 'package:ekzh/services/local_storage.dart';
-import 'package:ekzh/services/secure_storage_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class Repository {
+import 'entities/card_ekzh.dart';
+import 'entities/pending_request.dart';
+import 'https_service.dart';
+import 'local_storage.dart';
+import 'secure_storage_service.dart';
 
+class Repository {
   static final Repository _instance = Repository._internal();
 
   factory Repository() {
@@ -18,8 +18,6 @@ class Repository {
 
   Repository._internal() {
     // init logic
-
-
   }
 
   Future initialize() async {
@@ -42,13 +40,16 @@ class Repository {
         if (lastUpdateTime == null) {
           return;
         }
-        
-        final response = await _httpService.getRegistr(lastUpdate: DateTime.parse(lastUpdateTime));
+
+        final response = await _httpService.getRegistr(
+            lastUpdate: DateTime.parse(lastUpdateTime));
         final cards = response.registers
-          .map(((e) => CardEkzh.fromRegister(e, response.names, response.tariffs)))
-          .toList();
+            .map(((e) =>
+                CardEkzh.fromRegister(e, response.names, response.tariffs)))
+            .toList();
         cardRepository.addNewCards(newCards: cards);
-        await SecureStorageService().saveLastupdateDateTime(response.lastUpdated);
+        await SecureStorageService()
+            .saveLastupdateDateTime(response.lastUpdated);
       } catch (e) {
         print(e.toString());
       }

@@ -1,10 +1,9 @@
-
-// manipurate token from local storage  
+// manipurate token from local storage
 // todo: process expiration date
-import 'package:ekzh/services/secure_storage_service.dart';
+
+import 'secure_storage_service.dart';
 
 class TokenService {
-
   static final TokenService _instance = TokenService._internal();
 
   factory TokenService() {
@@ -12,7 +11,7 @@ class TokenService {
   }
 
   TokenService._internal() {
-      // init logic
+    // init logic
   }
 
   String? _token;
@@ -39,5 +38,4 @@ class TokenService {
       return _service.saveToken(value);
     }
   }
-
 }

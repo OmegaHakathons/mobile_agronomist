@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:ekzh/cubits/app_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +9,7 @@ import '../common/navigation/route_name.dart';
 import '../models/app_tabs.dart';
 import '../models/pin_auth_status.dart';
 import '../models/state/pin_auth_state.dart';
+import 'app_cubit.dart';
 
 const String curPin = '1236';
 
@@ -22,7 +22,7 @@ class PinAuthCubit extends Cubit<PinAuthState> {
       emit(PinAuthState(pin: pin, pinStatus: PinAuthStatus.process));
     } else if (pin == curPin) {
       emit(const PinAuthState(pin: '', pinStatus: PinAuthStatus.success));
-      BlocProvider.of<AppCubit>(context).updateTab(AppTabs.work);
+      BlocProvider.of<AppCubit>(context).updateTab(AppTabs.main);
 
       context.goNamed(RouteName.base);
     } else {

@@ -1,9 +1,10 @@
-import 'package:ekzh/services/entities/tariff.dart';
-import 'package:ekzh/services/entities/register.dart';
+import '/../services/entities/tariff.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
+
+import 'register.dart';
 
 part 'card_ekzh.freezed.dart';
 part 'card_ekzh.g.dart';
@@ -24,7 +25,7 @@ class CardEkzh with _$CardEkzh {
       Register register, Map<String, dynamic> names, List<Tariff> tariffs) {
     try {
       final tariff = tariffs.firstWhere((e) => register.tariffId == e.id,
-          orElse: () => const Tariff(name: "Полный", amount: 100, id: 0));
+          orElse: () => Tariff(name: "Полный", amount: 100, id: 0));
       return CardEkzh(
           hash: register.hash,
           birthdate: register.birthdate,

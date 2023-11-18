@@ -1,4 +1,3 @@
-import 'package:ekzh/cubits/card_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../common/navigation/route_name.dart';
 import '../../../common/theme/app_colors.dart';
 import '../../../cubits/app_cubit.dart';
+import '../../../cubits/card_cubit.dart';
 import '../../../models/app_tabs.dart';
 import '../../common/out_button.dart';
 
@@ -21,14 +21,14 @@ class _AuthFormState extends State<AuthForm> {
   late TextEditingController passwordController;
   late GlobalKey<FormState> formKey;
 
-  Future<void> getCards() async {
-    final postsCubit = context.read<CardCubit>();
-    await postsCubit.getCards();
-  }
+  // Future<void> getCards() async {
+  //   final postsCubit = context.read<CardCubit>();
+  //   await postsCubit.getCards();
+  // }
 
   @override
   void initState() {
-    getCards();
+    // getCards();
     super.initState();
     loginController = TextEditingController()..text = 'test@mail.ru';
     passwordController = TextEditingController()..text = '123qwe123';
@@ -44,13 +44,13 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CardCubit>().state;
+    // final state = context.watch<CardCubit>().state;
     return Form(
       key: formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Номер сотрудника'),
+          const Text('Логин'),
           const SizedBox(height: 8),
           TextFormField(
             controller: loginController,
@@ -62,7 +62,7 @@ class _AuthFormState extends State<AuthForm> {
             },
           ),
           const SizedBox(height: 12),
-          const Text('Код авторизации'),
+          const Text('Пароль'),
           const SizedBox(height: 8),
           TextFormField(
             obscureText: true,
@@ -80,14 +80,14 @@ class _AuthFormState extends State<AuthForm> {
             fillColor: AppColors.white,
             text: 'Войти',
             onTap: () {
-              final future = BlocProvider.of<AppCubit>(context)
-                  .tryAuth(loginController.text, passwordController.text);
-              future.then((result) {
-                if (formKey.currentState!.validate()) {
-                  BlocProvider.of<AppCubit>(context).updateTab(AppTabs.work);
-                  context.goNamed(RouteName.base);
-                }
-              });
+              // final future = BlocProvider.of<AppCubit>(context)
+              //     .tryAuth(loginController.text, passwordController.text);
+              // future.then((result) {
+              if (formKey.currentState!.validate()) {
+                BlocProvider.of<AppCubit>(context).updateTab(AppTabs.main);
+                context.goNamed(RouteName.base);
+              }
+              // });
             },
           ),
         ],

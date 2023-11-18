@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-ThemeData _themeLight = ThemeData.light(useMaterial3: true);
+ThemeData _themeLight = ThemeData.light(
+    // useMaterial3: true,
+    );
 
 ThemeData themeLight = _themeLight.copyWith(
+  primaryColor: Colors.black,
   scaffoldBackgroundColor: AppColors.white,
   colorScheme: _schemeLight(_themeLight.colorScheme),
   textTheme: _textLight(_themeLight.textTheme),
@@ -22,8 +25,9 @@ ColorScheme _schemeLight(ColorScheme base) {
     // tertiaryContainer: AppColors.greyLighter,
     // onTertiary: AppColors.textSecondary,
     // background: AppColors.greyLight,
-    primary: AppColors.blue,
+    primary: AppColors.black,
     error: AppColors.error,
+    secondary: AppColors.black,
   );
 }
 
@@ -37,14 +41,14 @@ TextTheme _textLight(TextTheme base) {
     headlineLarge: base.headlineLarge!.copyWith(
       fontSize: 36,
       // fontFamily: 'SF',
-      color: AppColors.blue,
+      // color: AppColors.blue,
     ),
     labelLarge: base.labelLarge!.copyWith(
       fontSize: 16,
       fontWeight: FontWeight.w500,
       height: 19.2 / 16,
       // fontFamily: 'SF',
-      color: AppColors.blue,
+      // color: AppColors.blue,
     ),
     bodySmall: base.bodySmall!.copyWith(
       fontSize: 14,
@@ -58,13 +62,13 @@ TextTheme _textLight(TextTheme base) {
     ),
     titleSmall: base.titleMedium!.copyWith(
       fontSize: 18,
-      fontWeight: FontWeight.w500,
+      // fontWeight: FontWeight.w500,
       // fontFamily: 'SF',
     ),
     titleLarge: base.titleLarge!.copyWith(
       fontSize: 24,
-      fontWeight: FontWeight.w700,
-      color: AppColors.blue,
+      // fontWeight: FontWeight.w700,
+      // color: AppColors.blue,
       // fontFamily: 'SF',
     ),
     // labelMedium: base.labelMedium!.copyWith(
@@ -86,20 +90,20 @@ TextTheme _textLight(TextTheme base) {
 ButtonStyle _elevButtonLight = ElevatedButton.styleFrom(
   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
   textStyle: TextStyle(fontSize: 18),
-  backgroundColor: AppColors.blue,
+  // backgroundColor: AppColors.blue,
   foregroundColor: AppColors.white,
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
 );
 
 ButtonStyle _textButtonLight = TextButton.styleFrom(
-  foregroundColor: AppColors.blue,
+  // foregroundColor: AppColors.blue,
   padding: EdgeInsets.zero,
 );
 
 ButtonStyle _outlinedButtonLight = OutlinedButton.styleFrom(
   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
   textStyle: TextStyle(fontSize: 18),
-  shape: StadiumBorder(side: BorderSide(color: AppColors.blue, width: 2)),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
 );
 
 AppBarTheme _appBarLight(AppBarTheme base) {
@@ -107,8 +111,8 @@ AppBarTheme _appBarLight(AppBarTheme base) {
     backgroundColor: AppColors.white,
     foregroundColor: AppColors.black,
     elevation: 0.0,
-    centerTitle: true,
-    surfaceTintColor: AppColors.white,
+    // centerTitle: true,
+    // surfaceTintColor: AppColors.white,
   );
 }
 

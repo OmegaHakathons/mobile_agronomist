@@ -1,10 +1,9 @@
-import 'package:ekzh/cubits/card_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/theme/app_colors.dart';
-import '../../../models/state/card_state.dart';
+import '../../../cubits/card_cubit.dart';
 // import 'package:intl/intl.dart';
 
 class RegistryUpdate extends StatefulWidget {

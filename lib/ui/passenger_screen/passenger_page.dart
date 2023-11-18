@@ -1,10 +1,10 @@
-import 'package:ekzh/ui/common/out_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../common/navigation/route_name.dart';
 import '../../common/theme/app_colors.dart';
 import '../../services/entities/card_ekzh.dart';
+import '../common/out_button.dart';
 import '../common/passenger_card.dart';
 
 class PassengerPage extends StatelessWidget {

@@ -1,4 +1,4 @@
-name: ekzh
+name: agro_agro
 description: A new Flutter project.
 publish_to: 'none' 
 version: 1.0.0+1
@@ -30,6 +30,16 @@ dependencies:
   nfc_manager:
   path_provider: ^2.1.1
   uuid: ^4.0.0
+  logger: ^1.4.0
+  dio: ^5.0.0
+  grouped_list:
+  dropdown_button2: ^2.3.9
+
+  casa_vertical_stepper: ^0.0.5
+
+
+  firebase_core: ^2.22.0
+  firebase_messaging: ^14.7.4
   # nfc_classic_mifare:
   #   path: D:\Soft\ITMO\MARIYA\Flutter\nfc_classic_mifare-main
 

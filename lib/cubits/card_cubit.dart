@@ -1,17 +1,17 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:ekzh/models/state/card_state.dart';
-import 'package:ekzh/services/entities/card_ekzh.dart';
-import 'package:ekzh/services/local_storage.dart';
-import 'package:ekzh/services/secure_storage_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path_provider/path_provider.dart';
 
-// import 'package:medium_bloc_cache_project/home/home.dart';
+import '../models/state/card_state.dart';
+import '../services/entities/card_ekzh.dart';
+import '../services/local_storage.dart';
+import '../services/secure_storage_service.dart';
 
+// import 'package:medium_bloc_cache_project/home/home.dart';
 
 class CardCubit extends Cubit<CardState> {
   CardCubit({required CardRepository cardRepository})
@@ -51,5 +51,4 @@ class CardCubit extends Cubit<CardState> {
       return DateTime.now();
     }
   }
-
 }

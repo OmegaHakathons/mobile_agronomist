@@ -9,7 +9,6 @@ part 'app_state.freezed.dart';
 class AppState with _$AppState {
   const factory AppState({
     @Default(AppTabs.main) AppTabs currentTab,
-    @Default(Work.stop) Work currentWork,
     @Default(true) bool isConnection,
     @Default(false) bool isAuthorized,
   }) = _AppState;

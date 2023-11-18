@@ -1,5 +1,6 @@
-import 'package:ekzh/services/entities/card_ekzh.dart';
 import 'package:flutter/material.dart';
+
+import '../../services/entities/card_ekzh.dart';
 
 @immutable
 sealed class CardState {}

@@ -2,15 +2,16 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:ekzh/services/entities/auth_entities.dart';
-import 'package:ekzh/services/entities/pending_request.dart';
-import 'package:ekzh/services/entities/register_entities.dart';
-import 'package:ekzh/services/entities/service_entity.dart';
-import 'package:ekzh/services/repository.dart';
-import 'package:ekzh/services/token_service.dart';
 import 'package:http/http.dart';
 import 'package:retry/retry.dart';
 import 'package:uuid/uuid.dart';
+
+import 'entities/auth_entities.dart';
+import 'entities/pending_request.dart';
+import 'entities/register_entities.dart';
+import 'entities/service_entity.dart';
+import 'repository.dart';
+import 'token_service.dart';
 
 enum AuthType { password, pin }
 
@@ -80,11 +81,9 @@ class HttpsService {
 
     Map<String, String>? query;
     if (lastUpdate != null) {
-      query = {
-      'updated_at': lastUpdate.toUtc().toString()
-      };
+      query = {'updated_at': lastUpdate.toUtc().toString()};
     }
-     
+
     final url = Uri.https(_baseUrl, '$_api/cards', query);
     return retry(
       () async {
@@ -120,34 +119,33 @@ class HttpsService {
     };
     final body = json.encode(requestedBody);
     final url = Uri.https(_baseUrl, '$_api/shift/start');
-      await retry(
-        () async {
-          final response =
-              await _client.post(url, headers: headers, body: body);
-          if (response.statusCode == 200) {
-            var value = jsonDecode(response.body);
-            return value;
-          } else if (response.statusCode == 409) {
-            await stopShift();
-            throw TimeoutException("temp");
-          } else {
-            throw Exception("Failed to logIn");
-          }
-        },
-        maxAttempts: 3,
-        retryIf: (e) => e is TimeoutException,
-      ).onError((e, _) async {
-        if (e is TimeoutException || e is SocketException) {
-          log('не получилось отправить начало смены');
-          final request = PendingRequest(
+    await retry(
+      () async {
+        final response = await _client.post(url, headers: headers, body: body);
+        if (response.statusCode == 200) {
+          var value = jsonDecode(response.body);
+          return value;
+        } else if (response.statusCode == 409) {
+          await stopShift();
+          throw TimeoutException("temp");
+        } else {
+          throw Exception("Failed to logIn");
+        }
+      },
+      maxAttempts: 3,
+      retryIf: (e) => e is TimeoutException,
+    ).onError((e, _) async {
+      if (e is TimeoutException || e is SocketException) {
+        log('не получилось отправить начало смены');
+        final request = PendingRequest(
             url: url.toString(),
             body: body,
             headers: json.encode(headers),
             id: const Uuid().v4().toString());
-          log('сохранили начало смены');
-          return await Repository().savePendingRequest(request);
-        }
-      });
+        log('сохранили начало смены');
+        return await Repository().savePendingRequest(request);
+      }
+    });
   }
 
   Future stopShift() async {
@@ -163,31 +161,30 @@ class HttpsService {
     };
     final body = json.encode(requestedBody);
     final url = Uri.https(_baseUrl, '$_api/shift/stop');
-      return retry(
-        () async {
-          final response =
-              await _client.post(url, headers: headers, body: body);
-          if (response.statusCode == 200) {
-            var value = jsonDecode(response.body);
-            return value;
-          } else {
-            throw Exception("Failed to logIn");
-          }
-        },
-        maxAttempts: 3,
-        retryIf: (e) => e is TimeoutException,
-      ).onError((e, _) async {
-        if (e is TimeoutException || e is SocketException) {
-          log('не получилось отправить окончания смены');
-          final request = PendingRequest(
+    return retry(
+      () async {
+        final response = await _client.post(url, headers: headers, body: body);
+        if (response.statusCode == 200) {
+          var value = jsonDecode(response.body);
+          return value;
+        } else {
+          throw Exception("Failed to logIn");
+        }
+      },
+      maxAttempts: 3,
+      retryIf: (e) => e is TimeoutException,
+    ).onError((e, _) async {
+      if (e is TimeoutException || e is SocketException) {
+        log('не получилось отправить окончания смены');
+        final request = PendingRequest(
             url: url.toString(),
             body: body,
             headers: json.encode(headers),
             id: const Uuid().v4().toString());
-          log('сохранили окончения смены');
-          return await Repository().savePendingRequest(request);
-        }
-      });    
+        log('сохранили окончения смены');
+        return await Repository().savePendingRequest(request);
+      }
+    });
   }
 
   // MARK: - route
@@ -221,34 +218,30 @@ class HttpsService {
     final body = json.encode(request);
     final url = Uri.https(_baseUrl, '$_api/shift/route/start');
     return retry(
-        () async {
-          final response = await _client.post(
-            url,
-            headers: headers,
-            body: body);
-          if (response.statusCode == 200) {
-            var value = jsonDecode(response.body);
-            log('отправили начало маршрута');
-            return value;
-          } else {
-            throw Exception("Failed to logIn");
-          }
-        },
-        maxAttempts: 3,
-        retryIf: (e) => e is TimeoutException,
-      ).onError((e, _) async {
-        if (e is TimeoutException || e is SocketException) {
-          log('не получилось отправить начало марштура');
-          final request = PendingRequest(
+      () async {
+        final response = await _client.post(url, headers: headers, body: body);
+        if (response.statusCode == 200) {
+          var value = jsonDecode(response.body);
+          log('отправили начало маршрута');
+          return value;
+        } else {
+          throw Exception("Failed to logIn");
+        }
+      },
+      maxAttempts: 3,
+      retryIf: (e) => e is TimeoutException,
+    ).onError((e, _) async {
+      if (e is TimeoutException || e is SocketException) {
+        log('не получилось отправить начало марштура');
+        final request = PendingRequest(
             url: url.toString(),
             body: body,
             headers: json.encode(headers),
             id: const Uuid().v4().toString());
-          log('сохранили начало маршрута');
-          return await Repository().savePendingRequest(request);
-        }
+        log('сохранили начало маршрута');
+        return await Repository().savePendingRequest(request);
       }
-    );
+    });
   }
 
   Future stopRoute() async {
@@ -263,35 +256,35 @@ class HttpsService {
     };
     final body = json.encode(request);
     final url = Uri.https(_baseUrl, '$_api/shift/route/stop');
-      return retry(
-        () async {
-          final response = await _client.post(
-            url,
-            headers: headers,
-            body: body,
-          );
-          if (response.statusCode == 200) {
-            var value = jsonDecode(response.body);
-            log('отправили конец маршрута');
-            return value;
-          } else {
-            throw Exception("Failed to logIn");
-          }
-        },
-        maxAttempts: 3,
-        retryIf: (e) => e is TimeoutException,
-      ).onError((e, _) async {
-        if (e is TimeoutException || e is SocketException) {
-          log('не получилось отправить окончание марштура');
-          final request = PendingRequest(
+    return retry(
+      () async {
+        final response = await _client.post(
+          url,
+          headers: headers,
+          body: body,
+        );
+        if (response.statusCode == 200) {
+          var value = jsonDecode(response.body);
+          log('отправили конец маршрута');
+          return value;
+        } else {
+          throw Exception("Failed to logIn");
+        }
+      },
+      maxAttempts: 3,
+      retryIf: (e) => e is TimeoutException,
+    ).onError((e, _) async {
+      if (e is TimeoutException || e is SocketException) {
+        log('не получилось отправить окончание марштура');
+        final request = PendingRequest(
             url: url.toString(),
             body: body,
             headers: json.encode(headers),
             id: const Uuid().v4().toString());
-          log('сохранили окончания маршрута');
-          return await Repository().savePendingRequest(request);
-        }
-      });
+        log('сохранили окончания маршрута');
+        return await Repository().savePendingRequest(request);
+      }
+    });
   }
 
   Future cardCheck(int cardNumber) async {
@@ -310,33 +303,33 @@ class HttpsService {
     final body = json.encode(request);
     final url = Uri.https(_baseUrl, '$_api/card/check');
     return retry(
-        () async {
-          final response = await _client.post(
-            url,
-            headers: headers,
-            body: body,
-          );
-          if (response.statusCode == 200) {
-            var value = jsonDecode(response.body);
-            return value;
-          } else {
-            throw Exception("Failed to logIn");
-          }
-        },
-        maxAttempts: 3,
-        retryIf: (e) => e is TimeoutException,
-      ).onError((e, _) async {
-        if (e is TimeoutException || e is SocketException) {
-          log('не получилось отправить начало марштура');
-          final request = PendingRequest(
+      () async {
+        final response = await _client.post(
+          url,
+          headers: headers,
+          body: body,
+        );
+        if (response.statusCode == 200) {
+          var value = jsonDecode(response.body);
+          return value;
+        } else {
+          throw Exception("Failed to logIn");
+        }
+      },
+      maxAttempts: 3,
+      retryIf: (e) => e is TimeoutException,
+    ).onError((e, _) async {
+      if (e is TimeoutException || e is SocketException) {
+        log('не получилось отправить начало марштура');
+        final request = PendingRequest(
             url: url.toString(),
             body: body,
             headers: json.encode(headers),
             id: const Uuid().v4().toString());
-          log('сохранили начало маршрута');
-          return await Repository().savePendingRequest(request);
-        }
-      });
+        log('сохранили начало маршрута');
+        return await Repository().savePendingRequest(request);
+      }
+    });
   }
 
   // MARK: - Services
@@ -351,20 +344,20 @@ class HttpsService {
     };
     final url = Uri.https(_baseUrl, '$_api/company/services');
     return retry(
-        () async {
-          final response = await _client.get(
-            url,
-            headers: headers,
-          );
-          if (response.statusCode == 200) {
-            return serviceEntityFromJson(response.body);
-          } else {
-            throw Exception("Failed to logIn");
-          }
-        },
-        maxAttempts: 3,
-        retryIf: (e) => e is TimeoutException,
-      );
+      () async {
+        final response = await _client.get(
+          url,
+          headers: headers,
+        );
+        if (response.statusCode == 200) {
+          return serviceEntityFromJson(response.body);
+        } else {
+          throw Exception("Failed to logIn");
+        }
+      },
+      maxAttempts: 3,
+      retryIf: (e) => e is TimeoutException,
+    );
   }
 
   // MARK: - Pending requests

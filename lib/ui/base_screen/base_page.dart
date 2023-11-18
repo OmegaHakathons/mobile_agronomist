@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:ekzh/models/app_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -8,11 +7,12 @@ import 'package:nfc_manager/nfc_manager.dart';
 import '../../common/navigation/route_name.dart';
 import '../../common/theme/app_colors.dart';
 import '../../cubits/app_cubit.dart';
+import '../../models/app_tabs.dart';
 import '../../models/state/app_state.dart';
 import '../../models/work.dart';
+import '../calendar_screen/book_page.dart';
 import '../main_screen/main_page.dart';
-import '../work_screen/work_page.dart';
-import 'widgets/qr_button.dart';
+import '../work_screen/stat_page.dart';
 
 class BottomItem {
   final IconData icon;
@@ -28,87 +28,58 @@ class BasePage extends StatelessWidget {
 
   final _bottomItems = const [
     BottomItem(icon: Icons.home, label: 'Главная'),
-    BottomItem(icon: Icons.work_history_rounded, label: 'Смена'),
+    BottomItem(icon: Icons.book, label: 'Справочник'),
+    BottomItem(icon: Icons.stacked_bar_chart_sharp, label: 'Статистика'),
   ];
 
   @override
   Widget build(BuildContext context) {
+    log('перестраиваем base');
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         int currentIndex = AppTabs.values.indexOf(state.currentTab);
-        bool isStop = state.currentWork == Work.stop;
         return Scaffold(
-          body: state.currentTab == AppTabs.main ? MainPage() : WorkPage(),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton:
-              state.currentWork == Work.process ? const QRButton() : null,
+          body: state.currentTab == AppTabs.statistics
+              ? StatPage()
+              : state.currentTab == AppTabs.book
+                  ? BookPage()
+                  : MainPage(),
           bottomNavigationBar: BottomAppBar(
             child: SizedBox(
               height: 60,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        BlocProvider.of<AppCubit>(context)
-                            .updateTab(AppTabs.main);
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _bottomItems[0].icon,
-                            color: currentIndex == 0
-                                ? AppColors.blue
-                                : AppColors.greyDark,
+                children: List.generate(
+                    _bottomItems.length,
+                    (index) => Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              BlocProvider.of<AppCubit>(context)
+                                  .updateTab(AppTabs.values[index]);
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  _bottomItems[index].icon,
+                                  color: currentIndex == index
+                                      ? AppColors.black
+                                      : AppColors.greyDark,
+                                ),
+                                Text(
+                                  _bottomItems[index].label,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                          color: currentIndex == index
+                                              ? AppColors.black
+                                              : AppColors.greyDark),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            _bottomItems[0].label,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(
-                                    color: currentIndex == 0
-                                        ? AppColors.blue
-                                        : AppColors.greyDark),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (!isStop) const Spacer(),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        BlocProvider.of<AppCubit>(context)
-                            .updateTab(AppTabs.work);
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _bottomItems[1].icon,
-                            color: currentIndex == 1
-                                ? AppColors.blue
-                                : AppColors.greyDark,
-                          ),
-                          Text(
-                            _bottomItems[1].label,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(
-                                    color: currentIndex == 1
-                                        ? AppColors.blue
-                                        : AppColors.greyDark),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                        )),
               ),
             ),
           ),

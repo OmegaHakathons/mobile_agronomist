@@ -1,13 +1,11 @@
 import 'dart:developer';
 
-import 'package:ekzh/services/entities/pending_request.dart';
-import 'package:ekzh/services/entities/tariff.dart';
-import 'package:ekzh/services/https_service.dart';
-import 'package:ekzh/services/secure_storage_service.dart';
-
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'entities/card_ekzh.dart';
+import 'entities/tariff.dart';
+import 'https_service.dart';
+import 'secure_storage_service.dart';
 // import 'package:hive/hive.dart';
 
 // class LocalStorage {

@@ -1,1 +1,1 @@
-enum Work { process, paused, stop }
+enum Work { process, none }
