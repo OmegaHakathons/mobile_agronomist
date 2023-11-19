@@ -3,6 +3,8 @@ import 'package:agro_agro/models/task/type_task.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
+
 import '../../models/task/car.dart';
 
 class AddTaskPage extends StatefulWidget {
@@ -251,6 +253,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
+                            context.pop();
                           }
                         },
                         child: Text('Создать задачу'))),

@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.NFC" />
     <application
-        android:label="Контроль ЕКЖ"
+        android:label="Агроном"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
