@@ -1,10 +1,24 @@
 # Мобильное приложение для Агронома
 
 ## Что реализованно
-- Авторизация с помощью логина пароля
-- Считывание информации с карты с помощью NFC.
+- Авторизация с помощью:
+   * логина и пароля
+   * NFC и пин-кода
+- Офлайн режим
+- Создание задач
+- Пуш-уведомления об экстренных ситуациях
+
+#### Доступы
+
+Логин: tails
+Пароль: fox
+
+Карта NFC: любая
+Пин-код: 1236
 
 ### [Ссылка на презентацию](https://docs.google.com/presentation/d/1PhfNy2VUfFSlzjDwjdgHYQjP_7r62sRAfuef0zM5Sm8/edit#slide=id.g29d01f8e30f_13_9)
+
+### [Ссылка на макеты](https://www.figma.com/file/dlOFTpqa0UdhqnVFrr4lXo/AgroCode-Hack-2023?type=design&node-id=82-1355&mode=design&t=VkfWYuB0byfz7QyU-0)
 
 ## Сборка приложения
 
