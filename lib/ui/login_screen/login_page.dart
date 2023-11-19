@@ -34,9 +34,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-          gradient:
-              LinearGradient(colors: [AppColors.green, AppColors.greenDark])),
+      // decoration: const BoxDecoration(
+      //     gradient:
+      //         LinearGradient(colors: [AppColors.green, AppColors.greenDark])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
@@ -52,12 +52,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 32),
                   Text(
-                    'Вход в личный кабинет',
+                    'Вход в систему',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Для входа в личный кабинет приложите карту или авторизуйтесь по логину',
+                    'Для входа в систему приложите карту или авторизуйтесь по логину',
                     style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center,
                   ),

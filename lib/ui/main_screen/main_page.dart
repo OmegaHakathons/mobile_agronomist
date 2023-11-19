@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 
 import '../../common/navigation/route_name.dart';
-import '../../models/task/aggregate.dart';
-import '../../models/task/car.dart';
-import '../../models/task/status_step.dart';
-import '../../models/task/status_task.dart';
-import '../../models/task/step_custom.dart';
+import '../../common/utils.dart';
+import '../../cubits/app_cubit.dart';
+import '../../data/mok.dart';
+import '../../models/state/app_state.dart';
 import '../../models/task/task.dart';
-import '../../models/task/type_task.dart';
-import '../work_screen/stat_page.dart';
+import 'widgets/function_off.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,98 +19,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<Task> historyTasks = [
-    Task(
-      id: 5,
-      type: TypeTask.sowing,
-      shortDescription:
-          'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах.',
-      steps: [
-        StepCustom(
-          index: 0,
-          name: 'Осмотр Техники',
-          description:
-              'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих.',
-          status: StatusStep.complete,
-        ),
-        StepCustom(
-          index: 1,
-          name: 'Пополнил запас топливо',
-          description:
-              'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих.',
-          status: StatusStep.complete,
-        ),
-        StepCustom(
-          index: 2,
-          name: 'Дорога до поля',
-          description: 'Описание задачи в общих чертах.',
-          status: StatusStep.inprogress,
-        ),
-        StepCustom(
-          index: 3,
-          name: 'Посев',
-          description:
-              'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих.',
-          status: StatusStep.upcoming,
-        ),
-      ],
-      currentStep: 1,
-      car: Car(id: 4, name: 'Машина', number: 'У123АМ777'),
-      aggregate: Aggregate(id: 9, name: 'Агрегат', number: '6'),
-      field: 'П-51 ',
-      minSpeed: 8,
-      maxSpeed: 12,
-      deadline: DateTime(2023, 11, 16),
-      status: StatusTask.process,
-      executor: 'Иван Иванович',
-      money: 1234,
-    ),
-    Task(
-      id: 3,
-      type: TypeTask.protection,
-      shortDescription:
-          'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах.',
-      steps: [
-        StepCustom(
-          index: 0,
-          name: 'Осмотр Техники',
-          description:
-              'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих.',
-          status: StatusStep.complete,
-        ),
-        StepCustom(
-          index: 1,
-          name: 'Пополнил запас топливо',
-          description:
-              'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих.',
-          status: StatusStep.complete,
-        ),
-        StepCustom(
-          index: 2,
-          name: 'Дорога до поля',
-          description: 'Описание задачи в общих чертах.',
-          status: StatusStep.inprogress,
-        ),
-        StepCustom(
-          index: 3,
-          name: 'Посев',
-          description:
-              'Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих чертах. Описание задачи в общих.',
-          status: StatusStep.upcoming,
-        ),
-      ],
-      currentStep: 1,
-      car: Car(id: 4, name: 'Машина', number: 'У123АМ777'),
-      aggregate: Aggregate(id: 9, name: 'Агрегат', number: '6'),
-      field: 'П-51 ',
-      minSpeed: 8,
-      maxSpeed: 12,
-      deadline: DateTime(2023, 11, 10),
-      status: StatusTask.process,
-      executor: 'Иван Иванович',
-      money: 935,
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -130,21 +36,34 @@ class _MainPageState extends State<MainPage> {
           child: Icon(Icons.add),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  DateFormat('dd MMMM', 'ru').format(DateTime.now()),
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              const SizedBox(height: 20),
-              ImportantEvents(),
-              const SizedBox(height: 24),
-              Tasks(),
-            ],
+          child: BlocBuilder<AppCubit, AppState>(
+            builder: (context, state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!state.isConnection)
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      child: FunctionOff(
+                        text:
+                            'Отсутствует подключение к интернету! Данные будут сохраняться локально до появления соединения',
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      DateFormat('dd MMMM', 'ru').format(DateTime.now()),
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ImportantEvents(),
+                  const SizedBox(height: 24),
+                  Tasks(),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -234,9 +153,9 @@ class TaksList extends StatelessWidget {
         ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => TaskCard(task: task),
+            itemBuilder: (context, index) => TaskCard(task: allTasks[index]),
             separatorBuilder: (context, index) => SizedBox(height: 16),
-            itemCount: 3)
+            itemCount: allTasks.length)
       ]),
     );
   }
@@ -279,8 +198,8 @@ class TaskCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: Colors.grey),
-                child: Text(task.status.name),
+                    color: getStatusColor(task.status)),
+                child: Text(getTaskStatus(task.status)),
               )),
         ]),
       ),

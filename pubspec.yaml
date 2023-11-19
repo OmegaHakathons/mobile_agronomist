@@ -34,6 +34,8 @@ dependencies:
   dio: ^5.0.0
   grouped_list:
   dropdown_button2: ^2.3.9
+  
+  flutter_local_notifications: ^13.0.0
 
   casa_vertical_stepper: ^0.0.5
 

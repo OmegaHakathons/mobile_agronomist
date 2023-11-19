@@ -75,20 +75,16 @@ class _AuthFormState extends State<AuthForm> {
             },
           ),
           const SizedBox(height: 32),
-          OutButton(
-            contentColor: AppColors.blue,
-            fillColor: AppColors.white,
-            text: 'Войти',
-            onTap: () {
-              // final future = BlocProvider.of<AppCubit>(context)
-              //     .tryAuth(loginController.text, passwordController.text);
-              // future.then((result) {
-              if (formKey.currentState!.validate()) {
-                BlocProvider.of<AppCubit>(context).updateTab(AppTabs.main);
-                context.goNamed(RouteName.base);
-              }
-              // });
-            },
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    BlocProvider.of<AppCubit>(context).updateTab(AppTabs.main);
+                    context.goNamed(RouteName.base);
+                  }
+                },
+                child: Text('Войти')),
           ),
         ],
       ),
